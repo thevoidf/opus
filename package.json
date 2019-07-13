@@ -1,0 +1,21 @@
+{
+  "name": "beep",
+  "version": "0.0.1",
+  "description": "Discord bot for some things",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "watch": "nodemon index.js"
+  },
+  "author": "void",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^11.5.1",
+    "dotenv": "^8.0.0",
+    "node-opus": "^0.3.2",
+    "ytdl-core": "^0.29.3"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}
