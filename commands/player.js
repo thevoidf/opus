@@ -11,21 +11,17 @@ Player.play = async ({ message, command, args }) => {
 	if (!voiceChannel)
 		return message.reply('You need to be in voice channel');
 
-	const trackInfo = await ytdl.getInfo(args[0]);
-	const track = {
-		title: trackInfo.title,
-		url: trackInfo.video_url,
-	}
+	const { title, video_url: url } = await ytdl.getInfo(args[0]);
+	const track = { title, url };
 
 	if (!serverQueue) {
 		const guildQueue = {
 			textChannel,
 			voiceChannel,
-			tracks: []
+			tracks: [ track ]
 		}
 
 		queue.set(message.guild.id, guildQueue);
-		guildQueue.tracks.push(track);
 
 		const connection = await voiceChannel.join();
 		guildQueue.connection = connection;
