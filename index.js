@@ -22,25 +22,31 @@ client.on('guildMemberRemove', member => {
 });
 
 client.on('message', async message => {
-	const content = message.content;
+	const { content } = message;
 	const prefix = content[0];
-	const args = content.split(' ');
+	let args = content.split(' ');
 	const command = args[0].replace(PREFIX, '');
-	const commandArgs = args.splice(1);
+	args = args.splice(1);
 
 	const messageProps = {
 		message,
-		content,
-		prefix,
-		args,
 		command,
-		commandArgs,
+		args,
 	}
 
 	if (prefix !== PREFIX) return;
 
-	playerCommand(messageProps);
-	findCommand(messageProps);
+	registerCommand(command, findCommand(messageProps), ['find', 'test']);
+	registerCommand(command, playerCommand(messageProps), [
+		'play', 'stop', 'pause', 'resume', 'skip', 'leave'
+	]);
 });
+
+function registerCommand(command, group, commands) {
+	commands.forEach(cmd => {
+		if (command === cmd)
+			group[cmd]();
+	});
+}
 
 client.login(TOKEN);

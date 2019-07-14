@@ -1,18 +1,20 @@
-module.exports = async props => {
-	const { message, command, commandArgs } = props;
-
+module.exports = ({ message, command, args }) => {
 	const { guild: { members } } = message;
-	if (command === 'find') {
-		const users = [];
-		for (let [id, member] of members) {
-			const { user } = member;
-			// if (!user.bot && user.presence.status !== 'offline') {
-			if (!user.bot)
-				users.push(user);
-		}
+	return {
+		find: () => {
+			const users = [];
+			for (let [id, member] of members) {
+				const { user } = member;
+				if (!user.bot)
+					users.push(user);
+			}
 
-		const rand = Math.floor(Math.random() * (0 + users.length));
-		const user = users[rand];
-		message.channel.send(`Winner is <@${user.id}>`);
+			const rand = Math.floor(Math.random() * (0 + users.length));
+			const user = users[rand];
+			message.channel.send(`Winner is <@${user.id}>`);
+		},
+		test: () => {
+			message.channel.send('testing');
+		}
 	}
 }
