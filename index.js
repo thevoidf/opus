@@ -5,7 +5,7 @@ const client = new Discord.Client();
 
 const playerCommand = require('./commands/player');
 const findCommand = require('./commands/find');
-const { join, leave } = require('./events');
+const { onGuildMemberAdd, onGuildMemberRemove } = require('./events');
 
 const { TOKEN, PREFIX } = process.env;
 
@@ -13,13 +13,8 @@ client.on('ready', () => {
 	console.log(`Logged in as ${client.user.tag}!`);
 });
 
-client.on('guildMemberAdd', member => {
-	join(member);
-});
-
-client.on('guildMemberRemove', member => {
-	leave(member);
-});
+client.on('guildMemberAdd', onGuildMemberAdd);
+client.on('guildMemberRemove', onGuildMemberRemove);
 
 client.on('message', async message => {
 	const { content } = message;
@@ -31,12 +26,12 @@ client.on('message', async message => {
 	const commandArgs = {
 		message,
 		command,
-		args,
+		args
 	}
 
 	if (prefix !== PREFIX) return;
 
-	registerCommand(commandArgs, findCommand, ['find', 'test']);
+	registerCommand(commandArgs, findCommand, ['find']);
 	registerCommand(commandArgs, playerCommand, [
 		'play', 'stop', 'pause', 'resume', 'skip', 'leave'
 	]);

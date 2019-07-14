@@ -1,4 +1,4 @@
-exports.find = ({ message, command, args }) => {
+module.exports.find = ({ message, command, args }) => {
 	const { guild: { members } } = message;
 	const users = [];
 
@@ -12,8 +12,3 @@ exports.find = ({ message, command, args }) => {
 	const user = users[rand];
 	message.channel.send(`Winner is <@${user.id}>`);
 }
-
-exports.test = ({ message, command, args }) => {
-	message.channel.send('testing');
-}
-

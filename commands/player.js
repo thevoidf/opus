@@ -2,7 +2,9 @@ const ytdl = require('ytdl-core');
 
 const queue = new Map();
 
-exports.play = async ({ message, command, args }) => {
+const Player = exports = module.exports = {};
+
+Player.play = async ({ message, command, args }) => {
 	const { channel: textChannel, member: { voiceChannel } } = message;
 	const serverQueue = queue.get(message.guild.id);
 
@@ -34,7 +36,7 @@ exports.play = async ({ message, command, args }) => {
 	textChannel.send(`${track.title} added to queue`);
 }
 
-exports.pause = async ({ message, command, args }) => {
+Player.pause = async ({ message, command, args }) => {
 	const { member: { voiceChannel } } = message;
 	const serverQueue = queue.get(message.guild.id);
 
@@ -43,7 +45,7 @@ exports.pause = async ({ message, command, args }) => {
 	serverQueue.connection.dispatcher.pause();
 }
 
-exports.resume = async ({ message, command, args }) => {
+Player.resume = async ({ message, command, args }) => {
 	const { member: { voiceChannel } } = message;
 	const serverQueue = queue.get(message.guild.id);
 
@@ -52,12 +54,13 @@ exports.resume = async ({ message, command, args }) => {
 	serverQueue.connection.dispatcher.resume();
 }
 
-exports.stop = async ({ message, command, args }) => {
+Player.stop = async ({ message, command, args }) => {
+	const serverQueue = queue.get(message.guild.id);
 	serverQueue.tracks = [];
 	serverQueue.connection.dispatcher.end();
 }
 
-exports.skip = async ({ message, command, args }) => {
+Player.skip = async ({ message, command, args }) => {
 	const serverQueue = queue.get(message.guild.id);
 
 	if (!serverQueue)
@@ -65,7 +68,7 @@ exports.skip = async ({ message, command, args }) => {
 	serverQueue.connection.dispatcher.end();
 }
 
-exports.leave = async ({ message, command, args }) => {
+Player.leave = async ({ message, command, args }) => {
 	const { member: { voiceChannel } } = message;
 
 	if (!voiceChannel)
