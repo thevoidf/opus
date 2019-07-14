@@ -28,7 +28,7 @@ client.on('message', async message => {
 	const command = args[0].replace(PREFIX, '');
 	args = args.splice(1);
 
-	const messageProps = {
+	const commandArgs = {
 		message,
 		command,
 		args,
@@ -36,16 +36,17 @@ client.on('message', async message => {
 
 	if (prefix !== PREFIX) return;
 
-	registerCommand(command, findCommand(messageProps), ['find', 'test']);
-	registerCommand(command, playerCommand(messageProps), [
+	registerCommand(commandArgs, findCommand, ['find', 'test']);
+	registerCommand(commandArgs, playerCommand, [
 		'play', 'stop', 'pause', 'resume', 'skip', 'leave'
 	]);
 });
 
-function registerCommand(command, group, commands) {
+function registerCommand(args, group, commands) {
+	const { command } = args;
 	commands.forEach(cmd => {
 		if (command === cmd)
-			group[cmd]();
+			group[cmd](args);
 	});
 }
 
