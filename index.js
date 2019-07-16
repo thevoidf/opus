@@ -5,7 +5,9 @@ const client = new Discord.Client();
 
 const playerCommand = require('./commands/player');
 const findCommand = require('./commands/find');
-const { onGuildMemberAdd, onGuildMemberRemove } = require('./events');
+const mathCommand = require('./commands/math');
+const moderationCommand = require('./commands/moderation');
+const { onGuildMemberAdd, onGuildMemberRemove } = require('./events/member');
 
 const { TOKEN, PREFIX } = process.env;
 
@@ -31,9 +33,13 @@ client.on('message', async message => {
 
 	if (prefix !== PREFIX) return;
 
-	registerCommand(commandArgs, findCommand, ['find']);
+	registerCommand(commandArgs, findCommand, ['find', 'tell']);
+	registerCommand(commandArgs, mathCommand, ['calc']);
 	registerCommand(commandArgs, playerCommand, [
 		'play', 'stop', 'pause', 'resume', 'skip', 'leave'
+	]);
+	registerCommand(commandArgs, moderationCommand, [
+		'kick', 'ban', 'mute', 'unmute'
 	]);
 });
 
