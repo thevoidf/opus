@@ -1,4 +1,6 @@
-module.exports.find = ({ message, command, args }) => {
+const utils = module.exports = exports = {};
+
+utils.find = ({ message, command, args }) => {
 	const { guild: { members } } = message;
 	const users = [];
 
