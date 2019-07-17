@@ -1,10 +1,10 @@
 require('dotenv').config();
 
-const Discord = require('discord.js');
-const client = new Discord.Client();
+const { Client } = require('discord.js');
+const client = new Client();
 
 const playerCommand = require('./commands/player');
-const findCommand = require('./commands/find');
+const utilsCommand = require('./commands/utils');
 const mathCommand = require('./commands/math');
 const moderationCommand = require('./commands/moderation');
 const { onGuildMemberAdd, onGuildMemberRemove } = require('./events/member');
@@ -33,7 +33,7 @@ client.on('message', async message => {
 
 	if (prefix !== PREFIX) return;
 
-	registerCommand(commandArgs, findCommand, ['find', 'tell']);
+	registerCommand(commandArgs, utilsCommand, ['find', 'tell']);
 	registerCommand(commandArgs, mathCommand, ['calc']);
 	registerCommand(commandArgs, playerCommand, [
 		'play', 'stop', 'pause', 'resume', 'skip', 'leave'
