@@ -8,7 +8,7 @@ const cos = Math.cos;
 const sin = Math.sin;
 const pi = Math.PI;
 `;
-const regex = /[-\\*/,()\s+\d]|\bpow\b|\bcos\b|\bsin\b|\bpi\b/g;
+const regex = /[-\\*/,.()\s+\d]|\bpow\b|\bcos\b|\bsin\b|\bpi\b/g;
 
 math.calc = ({ message, command, args }) => {
 	const { channel } = message;
