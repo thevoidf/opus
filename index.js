@@ -33,7 +33,7 @@ client.on('message', async message => {
 
 	if (prefix !== PREFIX) return;
 
-	registerCommandGroup(commandArgs, utilsCommands, ['poll', 'find']);
+	registerCommandGroup(commandArgs, utilsCommands, ['poll', 'find', 'ping']);
 	registerCommandGroup(commandArgs, mathCommands, ['calc', 'pie', 'column']);
 	registerCommandGroup(commandArgs, playerCommands, [
 		'play', 'stop', 'pause', 'resume', 'skip', 'leave'

@@ -61,3 +61,11 @@ utils.find = ({ message, command, args }) => {
 	const user = users[rand];
 	channel.send(`Winner is <@${user.id}>`);
 }
+
+utils.ping = async ({ message, command, args }) => {
+	const oldMessage = await message.channel.send('Pinging...');
+	const latency = oldMessage.createdTimestamp - message.createdTimestamp;
+	const apiLatency = Math.round(message.client.ping);
+	const ping = `:hourglass_flowing_sand: Latency ${latency} | API Latency ${apiLatency}`;
+	oldMessage.edit(ping);
+}
