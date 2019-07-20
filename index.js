@@ -3,10 +3,10 @@ require('dotenv').config();
 const { Client } = require('discord.js');
 const client = new Client();
 
-const playerCommand = require('./commands/player');
-const utilsCommand = require('./commands/utils');
-const mathCommand = require('./commands/math');
-const moderationCommand = require('./commands/moderation');
+const playerCommands = require('./commands/player');
+const utilsCommands = require('./commands/utils');
+const mathCommands = require('./commands/math');
+const moderationCommands = require('./commands/moderation');
 const { onGuildMemberAdd, onGuildMemberRemove } = require('./events/member');
 
 const { TOKEN, PREFIX } = process.env;
@@ -33,17 +33,17 @@ client.on('message', async message => {
 
 	if (prefix !== PREFIX) return;
 
-	registerCommand(commandArgs, utilsCommand, ['find', 'tell']);
-	registerCommand(commandArgs, mathCommand, ['calc']);
-	registerCommand(commandArgs, playerCommand, [
+	registerCommandGroup(commandArgs, utilsCommands, ['poll', 'find']);
+	registerCommandGroup(commandArgs, mathCommands, ['calc', 'pie', 'column']);
+	registerCommandGroup(commandArgs, playerCommands, [
 		'play', 'stop', 'pause', 'resume', 'skip', 'leave'
 	]);
-	registerCommand(commandArgs, moderationCommand, [
+	registerCommandGroup(commandArgs, moderationCommands, [
 		'kick', 'ban', 'mute', 'unmute'
 	]);
 });
 
-function registerCommand(args, group, commands) {
+const registerCommandGroup = (args, group, commands) => {
 	const { command } = args;
 	commands.forEach(cmd => {
 		if (command === cmd)
