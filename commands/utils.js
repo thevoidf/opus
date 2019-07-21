@@ -1,4 +1,9 @@
-const { RichEmbed } = require('discord.js');
+const fs = require('fs');
+const path = require('path');
+const request = require('request');
+const { RichEmbed, Attachment } = require('discord.js');
+const { createCanvas, loadImage } = require('canvas');
+const { wrapText } = require('../utils');
 
 const utils = module.exports = exports = {};
 
@@ -68,6 +73,49 @@ utils.ping = async ({ message, command, args }) => {
 	const apiLatency = Math.round(message.client.ping);
 	const ping = `:hourglass_flowing_sand: Latency ${latency} | API Latency ${apiLatency}`;
 	oldMessage.edit(ping);
+}
+
+utils.meme = async ({ message, command, args }) => {
+	const text = args.join(' ');
+
+	if (text === '')
+		message.channel.send(`$meme 'meme text goes here'`);
+
+	const oldMessage = message;
+	const { url, width, height } = oldMessage.attachments.values().next().value;
+	const image = await request(url);
+	const filename = path.basename(image.path);
+	const imagePath = `/tmp/${filename}`;
+
+	image.pipe(fs.createWriteStream(imagePath)).on('close', async () => {
+		const canvas = createCanvas(width, height);
+		const ctx = canvas.getContext('2d');
+
+		const textSize = 40;
+		const xOffset = 80 - 20;
+		const yOffset = 80;
+
+		ctx.font = `${textSize}px monospace`;
+		ctx.fillStyle = '#000000';
+		const lineCount = wrapText(ctx, text, xOffset, yOffset, width - 60, textSize);
+
+		const bgHeight = (textSize * (lineCount + 1)) + yOffset;
+		canvas.height = height + bgHeight;
+
+		const img = await loadImage(imagePath);
+		ctx.drawImage(img, 0, bgHeight);
+
+		ctx.fillStyle = '#ffffff';
+		ctx.fillRect(0, 0, width, (textSize * (lineCount + 1)) + yOffset);
+
+		ctx.font = `${textSize}px monospace`;
+		ctx.fillStyle = '#000000';
+		wrapText(ctx, text, xOffset, yOffset, width - 60, textSize);
+
+		oldMessage.delete();
+		const attachment = new Attachment(canvas.toBuffer());
+		message.channel.send(attachment);
+	});
 }
 
 utils.invite = async ({ message, command, args }) => {

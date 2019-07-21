@@ -10,6 +10,7 @@
   "author": "void",
   "license": "ISC",
   "dependencies": {
+    "canvas": "^2.5.0",
     "chart.js": "^2.8.0",
     "chartjs-node": "^1.7.1",
     "chartjs-plugin-datalabels": "^0.6.0",
@@ -17,6 +18,7 @@
     "dotenv": "^8.0.0",
     "node-opus": "^0.3.2",
     "randomcolor": "^0.5.4",
+    "request": "^2.88.0",
     "ytdl-core": "^0.29.3"
   },
   "devDependencies": {
