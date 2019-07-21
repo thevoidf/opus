@@ -69,3 +69,8 @@ utils.ping = async ({ message, command, args }) => {
 	const ping = `:hourglass_flowing_sand: Latency ${latency} | API Latency ${apiLatency}`;
 	oldMessage.edit(ping);
 }
+
+utils.invite = async ({ message, command, args }) => {
+	const inviteURL = 'https://discordapp.com/oauth2/authorize?client_id=598902236680290375&permissions=8&scope=bot';
+	message.channel.send(inviteURL);
+}
