@@ -19,10 +19,13 @@ npm run watch # watch file changes
 * Player
 * Basic moderation (kick, ban, mute)
 * Calculator
+* Charts
+* Polls
 
 ##### Examples
 ```js
 $kick @user1 @user2 they were annoying
 $play <YOUTUBE_URL>
 $calc pow(2, 4) / (cos(1.5) * 10)
+$poll vim or emacs | vim | emacs
 ```
