@@ -43,7 +43,7 @@ client.on('message', async message => {
 		'play', 'stop', 'pause', 'resume', 'skip', 'leave'
 	]);
 	registerCommandGroup(commandArgs, utilsCommands, [
-		'ping', 'invite', 'poll', 'find', 'meme'
+		'ping', 'invite', 'poll', 'find', 'mkmeme'
 	]);
 });
 

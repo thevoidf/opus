@@ -3,6 +3,7 @@ const path = require('path');
 const request = require('request');
 const { RichEmbed, Attachment } = require('discord.js');
 const { createCanvas, loadImage } = require('canvas');
+var sizeOf = require('image-size');
 const { wrapText } = require('../utils');
 
 const utils = module.exports = exports = {};
@@ -75,24 +76,33 @@ utils.ping = async ({ message, command, args }) => {
 	oldMessage.edit(ping);
 }
 
-utils.meme = async ({ message, command, args }) => {
-	const text = args.join(' ');
-
-	if (text === '')
-		message.channel.send(`$meme 'meme text goes here'`);
-
+utils.mkmeme = async ({ message, command, args }) => {
+	const memeText = args.join(' ');
 	const oldMessage = message;
-	const { url, width, height } = oldMessage.attachments.values().next().value;
+
+	if (memeText === '')
+		return message.channel.send(`<PREFIX>mkmeme 'meme text goes here'`);
+
+	const memeArgParts = memeText.split('|');
+	const text = memeArgParts[0];
+	let url = memeArgParts[1];
+	let width, height;
+
+	if (!url)
+		({ url } = oldMessage.attachments.values().next().value);
+
 	const image = await request(url);
 	const filename = path.basename(image.path);
 	const imagePath = `/tmp/${filename}`;
 
 	image.pipe(fs.createWriteStream(imagePath)).on('close', async () => {
+		const { width, height } = sizeOf(imagePath);
+
 		const canvas = createCanvas(width, height);
 		const ctx = canvas.getContext('2d');
 
 		const textSize = 40;
-		const xOffset = 80 - 20;
+		const xOffset = 60;
 		const yOffset = 80;
 
 		ctx.font = `${textSize}px monospace`;
@@ -106,7 +116,7 @@ utils.meme = async ({ message, command, args }) => {
 		ctx.drawImage(img, 0, bgHeight);
 
 		ctx.fillStyle = '#ffffff';
-		ctx.fillRect(0, 0, width, (textSize * (lineCount + 1)) + yOffset);
+		ctx.fillRect(0, 0, width, bgHeight);
 
 		ctx.font = `${textSize}px monospace`;
 		ctx.fillStyle = '#000000';
