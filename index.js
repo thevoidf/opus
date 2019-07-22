@@ -20,9 +20,14 @@ client.on('guildMemberRemove', onGuildMemberRemove);
 
 client.on('message', async message => {
 	const { content } = message;
-	const prefix = content[0];
+
 	let args = content.split(' ');
-	const command = args[0].replace(PREFIX, '');
+	let command = args[0];
+
+	if (!command.startsWith(PREFIX))
+		return;
+
+	command = command.replace(PREFIX, '');
 	args = args.splice(1);
 
 	const commandArgs = {
@@ -30,8 +35,6 @@ client.on('message', async message => {
 		command,
 		args
 	}
-
-	if (prefix !== PREFIX) return;
 
 	registerCommandGroup(commandArgs, moderationCommands, [
 		'kick', 'ban', 'mute', 'unmute'
