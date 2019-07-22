@@ -3,7 +3,7 @@ const path = require('path');
 const request = require('request');
 const { RichEmbed, Attachment } = require('discord.js');
 const { createCanvas, loadImage } = require('canvas');
-var sizeOf = require('image-size');
+const sizeOf = require('image-size');
 const { wrapText } = require('../utils');
 
 const utils = module.exports = exports = {};
