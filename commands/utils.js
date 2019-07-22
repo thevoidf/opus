@@ -86,7 +86,6 @@ utils.mkmeme = async ({ message, command, args }) => {
 	const memeArgParts = memeText.split('|');
 	const text = memeArgParts[0];
 	let url = memeArgParts[1];
-	let width, height;
 
 	if (!url)
 		({ url } = oldMessage.attachments.values().next().value);
@@ -101,13 +100,19 @@ utils.mkmeme = async ({ message, command, args }) => {
 		const canvas = createCanvas(width, height);
 		const ctx = canvas.getContext('2d');
 
-		const textSize = 40;
-		const xOffset = 60;
-		const yOffset = 80;
+		const baseFontSize = 40;
+		const baseXOffset = 60;
+		const baseYOffset = 80;
+		const textSize = width > 400 ? baseFontSize : baseFontSize / 2;
+		const xOffset = width > 400 ? baseXOffset : baseXOffset / 2;
+		const yOffset = width > 400 ? baseYOffset : baseYOffset / 2;
+		const memeFont = `${textSize}px monospace`;
+		const bgColor = '#ffffff';
+		const textColor = '#000000';
 
-		ctx.font = `${textSize}px monospace`;
-		ctx.fillStyle = '#000000';
-		const lineCount = wrapText(ctx, text, xOffset, yOffset, width - 60, textSize);
+		ctx.font = memeFont;
+		ctx.fillStyle = textColor;
+		const lineCount = wrapText(ctx, text, xOffset, yOffset, width - baseXOffset, textSize);
 
 		const bgHeight = (textSize * (lineCount + 1)) + yOffset;
 		canvas.height = height + bgHeight;
@@ -115,12 +120,12 @@ utils.mkmeme = async ({ message, command, args }) => {
 		const img = await loadImage(imagePath);
 		ctx.drawImage(img, 0, bgHeight);
 
-		ctx.fillStyle = '#ffffff';
+		ctx.fillStyle = bgColor;
 		ctx.fillRect(0, 0, width, bgHeight);
 
-		ctx.font = `${textSize}px monospace`;
-		ctx.fillStyle = '#000000';
-		wrapText(ctx, text, xOffset, yOffset, width - 60, textSize);
+		ctx.font = memeFont;
+		ctx.fillStyle = textColor;
+		wrapText(ctx, text, xOffset, yOffset, width - baseXOffset, textSize);
 
 		oldMessage.delete();
 		const attachment = new Attachment(canvas.toBuffer());
