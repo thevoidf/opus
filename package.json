@@ -10,7 +10,8 @@
   "author": "void",
   "license": "ISC",
   "dependencies": {
-    "canvas": "^2.5.0",
+    "canvas": "npm:canvas@1",
+    "node-canvas": "npm:canvas@2",
     "chart.js": "^2.8.0",
     "chartjs-node": "^1.7.1",
     "chartjs-plugin-datalabels": "^0.6.0",

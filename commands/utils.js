@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const request = require('request');
 const { RichEmbed, Attachment } = require('discord.js');
-const { createCanvas, loadImage } = require('canvas');
+const { createCanvas, loadImage } = require('node-canvas');
 const sizeOf = require('image-size');
 const { wrapText } = require('../utils');
 
