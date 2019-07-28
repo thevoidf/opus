@@ -150,28 +150,28 @@ utils.imcool = async ({ message, command, args }) => {
 	const textSize = 80;
 	const fontEffects = {
 		matrix: {
-			shadowColor: 'purple',
+			shadowColor: '#008F11',
 			shadowOffsetX: 0,
 			shadowOffsetY: 0,
-			shadowBlur: 50,
+			shadowBlur: 5,
 			font: `${textSize}px Matrix`,
-			fillStyle: 'white',
-			strokeStyle: 'purple',
-			lineWidth: 10,
+			fillStyle: '#008F11',
+			strokeStyle: '#ffffff',
+			lineWidth: 3,
 			render: (ctx, text, xOffset, yOffset, textSize) => {
 				ctx.strokeText(text, xOffset, textSize);
 				ctx.fillText(text, yOffset, textSize);
 			}
 		},
 		neon: {
-			shadowColor: 'purple',
+			shadowColor: '#ff08e8',
 			shadowOffsetX: -5,
-			shadowOffsetY: 4,
+			shadowOffsetY: 8,
 			shadowBlur: 10,
 			font:`${textSize}px Neon`,
-			fillStyle: 'purple',
-			strokeStyle: 'white',
-			lineWidth: 2,
+			fillStyle: '#ff08e8',
+			strokeStyle: '#ffffff',
+			lineWidth: 3,
 			render: (ctx, text, xOffset, yOffset, textSize) => {
 				ctx.strokeText(text, xOffset, textSize);
 				ctx.fillText(text, yOffset, textSize);
@@ -180,7 +180,7 @@ utils.imcool = async ({ message, command, args }) => {
 	}
 	const coolArgs = args.join(' ').split('|').map(arg => arg.trim());
 	const text = coolArgs[0];
-	const effect = coolArgs[1] || 'matrix';
+	const effect = coolArgs[1] || 'neon';
 	if (!fontEffects.hasOwnProperty(effect))
 		return message.channel.send('Invalid font');
 
