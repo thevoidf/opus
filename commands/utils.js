@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const request = require('request');
 const { RichEmbed, Attachment } = require('discord.js');
-const { createCanvas, loadImage } = require('node-canvas');
+const { createCanvas, loadImage, registerFont } = require('node-canvas');
 const sizeOf = require('image-size');
 const { wrapText } = require('../utils');
 
@@ -136,4 +136,83 @@ utils.mkmeme = async ({ message, command, args }) => {
 utils.invite = async ({ message, command, args }) => {
 	const inviteURL = 'https://discordapp.com/oauth2/authorize?client_id=598902236680290375&permissions=8&scope=bot';
 	message.channel.send(inviteURL);
+}
+
+registerFont('./assets/fonts/matrix.otf', { family: 'Matrix' });
+registerFont('./assets/fonts/neon.ttf', { family: 'Neon' });
+utils.imcool = async ({ message, command, args }) => {
+	const oldMessage = message;
+
+	const width = 500;
+	const height = 500;
+	const bgColor = '#ffffff';
+	const textColor = '#000000';
+	const textSize = 80;
+	const fontEffects = {
+		matrix: {
+			shadowColor: 'purple',
+			shadowOffsetX: 0,
+			shadowOffsetY: 0,
+			shadowBlur: 50,
+			font: `${textSize}px Matrix`,
+			fillStyle: 'white',
+			strokeStyle: 'purple',
+			lineWidth: 10,
+			render: (ctx, text, xOffset, yOffset, textSize) => {
+				ctx.strokeText(text, xOffset, textSize);
+				ctx.fillText(text, yOffset, textSize);
+			}
+		},
+		neon: {
+			shadowColor: 'purple',
+			shadowOffsetX: -5,
+			shadowOffsetY: 4,
+			shadowBlur: 10,
+			font:`${textSize}px Neon`,
+			fillStyle: 'purple',
+			strokeStyle: 'white',
+			lineWidth: 2,
+			render: (ctx, text, xOffset, yOffset, textSize) => {
+				ctx.strokeText(text, xOffset, textSize);
+				ctx.fillText(text, yOffset, textSize);
+			}
+		}
+	}
+	const coolArgs = args.join(' ').split('|').map(arg => arg.trim());
+	const text = coolArgs[0];
+	const effect = coolArgs[1] || 'matrix';
+	if (!fontEffects.hasOwnProperty(effect))
+		return message.channel.send('Invalid font');
+
+	let canvas = createCanvas(width, height);
+	let ctx = canvas.getContext('2d');
+	const font = fontEffects[effect].font;
+	ctx.font = font;
+	const textWidth = ctx.measureText(text).width + 20;
+
+	canvas = createCanvas(textWidth, textSize * 2);
+	ctx = canvas.getContext('2d');
+	ctx.font = font;
+
+	const renderFont = ({ ctx, effect, xOffset, yOffset, textSize }) => {
+		const font = fontEffects[effect];
+		for (const [prop, value] of Object.entries(font)) {
+			if (prop === 'render')
+				continue;
+			ctx[prop] = value;
+		}
+		font.render(ctx, text, xOffset, yOffset, textSize);
+	}
+
+	renderFont({
+		ctx,
+		effect,
+		xOffset: 20,
+		yOffset: 20,
+		textSize
+	});
+
+	oldMessage.delete();
+	const attachment = new Attachment(canvas.toBuffer());
+	message.channel.send(attachment);
 }
