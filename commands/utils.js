@@ -216,3 +216,8 @@ utils.imcool = async ({ message, command, args }) => {
 	const attachment = new Attachment(canvas.toBuffer());
 	message.channel.send(attachment);
 }
+
+utils.clear = async ({ message, command, args }) => {
+	const messages = await message.channel.fetchMessages();
+	message.channel.bulkDelete(messages);
+}
